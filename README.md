@@ -16,7 +16,7 @@ these pre-install-issues here's a list of steps to go through...
 
 * Install docker and git (if you havent already)  
 * Clone this repository  
-``` git clone https://github.com/einar/docker-rt-swamid ```  
+``` git clone https://github.com/SUNET/docker-rt-swamid ```  
 * Build a local image that you can use with docker run (or as we do, docker-compose)  
 ``` docker build -t rt-swamid . ```  
 * With rt-swamid built, create a docker-compose.yml file (like the following example):  
