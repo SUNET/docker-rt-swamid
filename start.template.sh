@@ -22,6 +22,14 @@ if ["x${RT_OWNER}" = "x" ]; then
    RT_OWNER="root@localhost"
 fi
 
+if ["x${RT_PASSWORD}" = "x" ]; then
+   RT_PASSWORD="password"
+fi
+if ["x${POSTGRES_PASSWORD}" = "x" ]; then
+   POSTGRES_PASSWORD="password"
+fi
+
+
 # These are the queues to be added to RT manually. They are here so that the RT-mailgate can be setup.
 # UPDATE: 2017-11-22 this was changed using "conf.builder.pl" so that *ALL* environment using the form
 # "RT_Q[digit]" will be converted to RT and mail configuration automatically!!! No more static config!
@@ -357,7 +365,7 @@ Set(\$ExternalSettingsRemoteUser,
 Set(\$DatabaseHost   , 'postgres');
 Set(\$DatabaseRTHost , 'postgres');
 Set(\$DatabaseUser , 'postgres');
-Set(\$DatabasePassword , 'password');
+Set(\$DatabasePassword , '$POSTGRES_PASSWORD');
 Set(\$DatabaseName , 'postgres');
 
 Set(\$WebPath , "");
@@ -378,6 +386,7 @@ Set(\$AutoCreateNonExternalUsers, 1);
 # This is needed to be able to login as the internal root user for init of users etc. May be removed after
 # initial setup of admin accounts/groups has been completed.
 Set(\$WebFallbackToRTLogin, 1);
+Set(\$MaxAttachmentSize, 41943040); # About 40 MB
 
 1;
 EOF
