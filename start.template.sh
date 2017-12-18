@@ -82,7 +82,7 @@ cat>/etc/shibboleth/shibboleth2.xml<<EOF
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"    
     xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
-    logger="shibboleth/syslog.logger"
+    logger="syslog.logger"
     clockSkew="180">
 
     <ApplicationDefaults entityID="https://${SP_HOSTNAME}/shibboleth"
