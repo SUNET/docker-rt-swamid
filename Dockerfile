@@ -73,8 +73,9 @@ RUN chmod 770 /opt/rt4/etc && \
 
 RUN rm -f /etc/apache2/sites-available/*
 RUN rm -f /etc/apache2/sites-enabled/*
-ADD start.sh /start.sh
-RUN chmod a+rx /start.sh
+ADD start.template.sh /start.template.sh
+ADD conf.builder.pl /conf.builder.pl
+RUN chmod a+rx /conf.builder.pl
 ADD certs/ /etc/shibboleth/
 ADD attribute-map.xml /etc/shibboleth/attribute-map.xml
 ADD secure /var/www/secure
@@ -85,4 +86,4 @@ ADD index.php /var/www/
 EXPOSE 443
 EXPOSE 80
 EXPOSE 25
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/conf.builder.pl"]

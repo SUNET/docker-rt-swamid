@@ -22,21 +22,22 @@ if ["x${RT_OWNER}" = "x" ]; then
    RT_OWNER="root@localhost"
 fi
 
+if ["x${RT_PASSWORD}" = "x" ]; then
+   RT_PASSWORD="password"
+fi
+if ["x${POSTGRES_PASSWORD}" = "x" ]; then
+   POSTGRES_PASSWORD="password"
+fi
+
+
 # These are the queues to be added to RT manually. They are here so that the RT-mailgate can be setup.
+# UPDATE: 2017-11-22 this was changed using "conf.builder.pl" so that *ALL* environment using the form
+# "RT_Q[digit]" will be converted to RT and mail configuration automatically!!! No more static config!
 if ["x${RT_Q1}" = "x" ]; then
    RT_Q1="rt"
 fi
 if ["x${RT_Q2}" = "x" ]; then
    RT_Q2="bugs"
-fi
-if ["x${RT_Q3}" = "x" ]; then
-   RT_Q3="general"
-fi
-if ["x${RT_Q4}" = "x" ]; then
-   RT_Q4="questions"
-fi
-if ["x${RT_Q5}" = "x" ]; then
-   RT_Q5="requests"
 fi
 
 KEYDIR=/etc/ssl
@@ -81,7 +82,7 @@ cat>/etc/shibboleth/shibboleth2.xml<<EOF
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"    
     xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
-    logger="shibboleth/syslog.logger"
+    logger="syslog.logger"
     clockSkew="180">
 
     <ApplicationDefaults entityID="https://${SP_HOSTNAME}/shibboleth"
@@ -364,7 +365,7 @@ Set(\$ExternalSettingsRemoteUser,
 Set(\$DatabaseHost   , 'postgres');
 Set(\$DatabaseRTHost , 'postgres');
 Set(\$DatabaseUser , 'postgres');
-Set(\$DatabasePassword , 'password');
+Set(\$DatabasePassword , '$POSTGRES_PASSWORD');
 Set(\$DatabaseName , 'postgres');
 
 Set(\$WebPath , "");
@@ -375,7 +376,7 @@ Set(\$WebURL , \$WebBaseURL . \$WebPath . "/");
 
 Set(\$OwnerEmail, '$RT_OWNER');
 Set(\$LoopsToRTOwner, 1);
-Set(\$RTAddressRegexp, '^($RT_Q1|PLACEHOLDER1$RT_DEFAULTEMAIL)(-comment)?\@$RT_HOSTNAME$');
+Set(\$RTAddressRegexp, '^($RT_Q1|###PLACEHOLDER1###$RT_DEFAULTEMAIL)(-comment)?\@$RT_HOSTNAME$');
 
 # Users should still be autocreated by RT as internal users if they
 # fail to exist in an external service; this is so requestors (who
@@ -385,6 +386,7 @@ Set(\$AutoCreateNonExternalUsers, 1);
 # This is needed to be able to login as the internal root user for init of users etc. May be removed after
 # initial setup of admin accounts/groups has been completed.
 Set(\$WebFallbackToRTLogin, 1);
+Set(\$MaxAttachmentSize, 41943040); # About 40 MB
 
 1;
 EOF
@@ -399,7 +401,7 @@ chown -R rt-service:www-data /opt/rt4 && chmod 0770 /opt/rt4/etc && chmod 0770 /
 cat >> /etc/aliases <<EOF
 $RT_Q1:         	     "|/opt/rt4/bin/rt-mailgate --queue $RT_Q1 --action correspond --url https://$RT_HOSTNAME"
 ${RT_Q1}-comment: 	     "|/opt/rt4/bin/rt-mailgate --queue $RT_Q1 --action comment --url https://$RT_HOSTNAME"
-#PLACEHOLDER2
+###PLACEHOLDER2###
 $RT_DEFAULTEMAIL:	     "|/opt/rt4/bin/rt-mailgate --queue $RT_Q1 --action correspond --url https://$RT_HOSTNAME"
 ${RT_DEFAULTEMAIL}-comment:  "|/opt/rt4/bin/rt-mailgate --queue $RT_Q1 --action comment --url https://$RT_HOSTNAME"
 EOF
