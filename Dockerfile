@@ -50,7 +50,7 @@ RUN apt-get update -yqq && \
     make fixdeps && \
     make testdeps && \
     make config-install dirs files-install fixperms instruct && \
-    cpanm git://github.com/gbarr/perl-TimeDate.git && \
+    cpanm https://github.com/gbarr/perl-TimeDate.git && \
 # Clean up
     apt-get remove -y git cpanminus build-essential && \
     apt-get autoremove -y && \
