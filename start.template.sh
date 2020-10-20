@@ -15,7 +15,7 @@ if [ "x${SP_ABOUT}" = "x" ]; then
 fi
 
 if ["x${DEFAULT_LOGIN}" = "x" ]; then
-   DEFAULT_LOGIN="md.nordu.net" 
+   DEFAULT_LOGIN="seamless-access"
 fi
 
 if ["x${RT_OWNER}" = "x" ]; then
@@ -100,6 +100,12 @@ cat>/etc/shibboleth/shibboleth2.xml<<EOF
                                          index="1"
                                          Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
                                          conf:ignoreNoPassive="true" />
+
+            <!-- Seamless Access -->
+            <SessionInitiator type="Chaining" Location="/DS/seamless-access" id="seamless-access">
+                <SessionInitiator type="SAML2" defaultACSIndex="1" template="bindingTemplate.html"/>
+                <SessionInitiator type="SAMLDS" URL="https://service.seamlessaccess.org/ds/"/>
+            </SessionInitiator>
 
             <SessionInitiator type="Chaining" Location="/DS/nordu.net" id="md.nordu.net" relayState="cookie">
                 <SessionInitiator type="SAML2" defaultACSIndex="1" acsByIndex="false" template="bindingTemplate.html"/>
