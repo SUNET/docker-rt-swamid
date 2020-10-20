@@ -11,7 +11,7 @@ ENV SP_HOSTNAME sp.example.com
 ENV SP_CONTACT noc@nordu.net
 ENV SP_ABOUT /
 ENV METADATA_SIGNER md-signer2.crt
-ENV DEFAULT_LOGIN md.nordu.net
+ENV DEFAULT_LOGIN seamless-access 
 
 # Perl settings -n to don't to tests
 ENV RT_FIX_DEPS_CMD /usr/bin/cpanm
