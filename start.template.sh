@@ -88,7 +88,7 @@ cat>/etc/shibboleth/shibboleth2.xml<<EOF
     <ApplicationDefaults entityID="https://${SP_HOSTNAME}/shibboleth"
                          REMOTE_USER="eppn persistent-id targeted-id">
 
-        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
+        <Sessions lifetime="28800" timeout="3600" redirectLimit="exact" relayState="ss:mem"
                   checkAddress="false" handlerSSL="true" cookieProps="https">
             <Logout>SAML2 Local</Logout>
             <Handler type="MetadataGenerator" Location="/Metadata" signing="false"/>
